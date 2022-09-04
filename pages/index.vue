@@ -27,7 +27,7 @@
       </div>
       <div class="columns is-multiline">
         <progress v-if="comics == null" class="pt-8 progress is-large is-primary" max="100"></progress>
-        <div class="column is-one-fifth card-list" v-for="comic in comics">
+        <div class="column is-one-fifth card-list" v-for="comic in comics" :key="comic.num">
           <div class="card tile is-parent is-clickable" @click="openModal(comic)">
             <article class="tile is-child columns is-multiline">
               <div class="column is-full">
@@ -51,49 +51,49 @@
 </template>
 
 <script setup>
-  const currentPage = ref();
-  const comicsPerPage = ref(10);
-  const modalOpen = ref(false);
-  const clickedComic = ref();
-  const route = useRoute();
-  const comics = ref();
+const currentPage = ref();
+const comicsPerPage = ref(10);
+const modalOpen = ref(false);
+const clickedComic = ref();
+const route = useRoute();
+const comics = ref();
 
-  watch( () => route.query.currentPage,
-    newPage => {
-      currentPage.value = newPage;
-      fetchMultipleComics()
-    }
-  )
-  
-  onMounted(async () => {
-    //Default to page one if none is provided by query
-    currentPage.value = (typeof route.query.currentPage === 'undefined') ? 1 : route.query.currentPage
-    await fetchMultipleComics();
-  })
-
-  const response = await useAsyncData("todayscomic", () => {
-    return $fetch('/api/todayscomic');
-  });
-  const todaysComic = response.data.value;
-  const latestComicNum = todaysComic.num
-
-  function openModal(chosenComic) {
-    clickedComic.value = chosenComic;
-    modalOpen.value = true;
+watch( () => route.query.currentPage,
+  newPage => {
+    currentPage.value = newPage;
+    fetchMultipleComics();
   }
+);
+  
+onMounted(async () => {
+  //Default to page one if none is provided by query
+  currentPage.value = (typeof route.query.currentPage === 'undefined') ? 1 : route.query.currentPage;
+  await fetchMultipleComics();
+});
 
-  /**
+const response = await useAsyncData('todayscomic', () => {
+  return $fetch('/api/todayscomic');
+});
+const todaysComic = response.data.value;
+const latestComicNum = todaysComic.num;
+
+function openModal(chosenComic) {
+  clickedComic.value = chosenComic;
+  modalOpen.value = true;
+}
+
+/**
    * Fetches multiple comics at once to be able to list them
    */
-  async function fetchMultipleComics() {
-    comics.value = null;
-    let startComic = latestComicNum - (parseInt(currentPage.value) * comicsPerPage.value);
-    startComic = startComic < 1 ? 1 : startComic
-    const res = await useAsyncData("getcomics", () => {
-      return $fetch('/api/getcomics?todaysComic=' + latestComicNum + '&numberOfComics=' + comicsPerPage.value + "&startComic=" + startComic);
-    }, {initialCache: false});
-    comics.value = res.data.value;
-  }
+async function fetchMultipleComics() {
+  comics.value = null;
+  let startComic = latestComicNum - (parseInt(currentPage.value) * comicsPerPage.value);
+  startComic = startComic < 1 ? 1 : startComic;
+  const res = await useAsyncData('getcomics', () => {
+    return $fetch('/api/getcomics?todaysComic=' + latestComicNum + '&numberOfComics=' + comicsPerPage.value + '&startComic=' + startComic);
+  }, {initialCache: false});
+  comics.value = res.data.value;
+}
 </script>
 
 <style lang="scss" scoped>

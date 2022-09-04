@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-const props = defineProps(['comic', 'isOpen'])
+const props = defineProps(['comic', 'isOpen']);
 </script>
 
 <style lang="scss" scoped>

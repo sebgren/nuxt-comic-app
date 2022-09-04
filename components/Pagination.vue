@@ -14,19 +14,19 @@
 </template>
 
 <script setup>
-const props = defineProps(['totalItems', 'itemsPerPage', 'currentPage'])
-const totalPages = Math.round(props.totalItems / props.itemsPerPage)
-const currentPage = ref(parseInt(props.currentPage))
+const props = defineProps(['totalItems', 'itemsPerPage', 'currentPage']);
+const totalPages = Math.round(props.totalItems / props.itemsPerPage);
+const currentPage = ref(parseInt(props.currentPage));
 const router = useRouter();
 
 function nextPage() {
-  currentPage.value = currentPage.value >= totalPages ? currentPage.value : parseInt(currentPage.value) + 1
-  router.push({query: {currentPage: currentPage.value}})
+  currentPage.value = currentPage.value >= totalPages ? currentPage.value : parseInt(currentPage.value) + 1;
+  router.push({query: {currentPage: currentPage.value}});
 }
 
 function prevPage() {
-  currentPage.value = currentPage.value <= 1 ? currentPage.value : parseInt(currentPage.value) - 1
-  router.push({query: {currentPage: currentPage.value}})
+  currentPage.value = currentPage.value <= 1 ? currentPage.value : parseInt(currentPage.value) - 1;
+  router.push({query: {currentPage: currentPage.value}});
 }
 
 </script>

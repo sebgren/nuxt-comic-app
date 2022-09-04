@@ -2,6 +2,10 @@
 
 Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
 
+# Bulma
+
+This project uses [Bulma](https://bulma.io/)
+
 ## Setup
 
 Make sure to install the dependencies:

@@ -45,13 +45,13 @@
     </section>
     <ImageModal v-if="clickedComic && modalOpen" :comic="clickedComic" :is-open="modalOpen" @close="modalOpen = false;"/>
     <section class="section">
-      <Pagination :totalComics="todaysComic.num" :comicsPerPage="comicsPerPage" :currentPage="currentPage" />
+      <Pagination v-if="currentPage" :totalItems="todaysComic.num" :itemsPerPage="comicsPerPage" :currentPage="currentPage" />
     </section>
   </div>
 </template>
 
 <script setup>
-  const currentPage = ref(1);
+  const currentPage = ref();
   const comicsPerPage = ref(10);
   const modalOpen = ref(false);
   const clickedComic = ref();
@@ -62,10 +62,12 @@
     newPage => {
       currentPage.value = newPage;
       fetchMultipleComics()
-    })
+    }
+  )
   
   onMounted(async () => {
-    currentPage.value = (typeof route.query.currentPage === 'undefined') ? 0 : route.query.currentPage
+    //Default to page one if none is provided by query
+    currentPage.value = (typeof route.query.currentPage === 'undefined') ? 1 : route.query.currentPage
     await fetchMultipleComics();
   })
 
@@ -80,13 +82,17 @@
     modalOpen.value = true;
   }
 
+  /**
+   * Fetches multiple comics at once to be able to list them
+   */
   async function fetchMultipleComics() {
     comics.value = null;
-    const startComic = latestComicNum - (parseInt(currentPage.value) * comicsPerPage.value)
-    const multiRes = await useAsyncData("getcomics", () => {
+    let startComic = latestComicNum - (parseInt(currentPage.value) * comicsPerPage.value);
+    startComic = startComic < 1 ? 1 : startComic
+    const res = await useAsyncData("getcomics", () => {
       return $fetch('/api/getcomics?todaysComic=' + latestComicNum + '&numberOfComics=' + comicsPerPage.value + "&startComic=" + startComic);
     }, {initialCache: false});
-    comics.value = multiRes.data.value;
+    comics.value = res.data.value;
   }
 </script>
 

@@ -25,14 +25,20 @@ $control-border-width: 2px;
 $input-border-color: transparent;
 $input-shadow: none;
 
-.card.comic {
-  filter: drop-shadow(16px 16px 20px black);
-}
 .image.fluid-image{
   width: 100%;
   overflow-x: hidden;
 }
 
+.card-list{
+  max-height: 30vh;
+  .card.tile{
+    height: 100%;
+    .tile.is-child{
+      overflow-y: hidden;
+    }
+  }
+}
 // Import only what you need from Bulma
 // @import "../node_modules/bulma/sass/utilities/_all.sass";
 // @import "../node_modules/bulma/sass/base/_all.sass";

@@ -6,5 +6,6 @@ export default defineEventHandler(async () => {
     return data;
   } catch (error) {
     error.log('Could not fetch today\'s comic', error);
+    return {};
   }
 });

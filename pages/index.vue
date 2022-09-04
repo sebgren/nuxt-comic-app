@@ -23,6 +23,7 @@
       <div class="is-flex is-justify-content-center has-text-centered columns">
         <div class="column">
           <h4 class="title is-4">Older comics</h4>
+          <h5 class="subtitle is-size-6">Page {{currentPage}}</h5>
         </div>
       </div>
       <div class="columns is-multiline">
@@ -32,6 +33,7 @@
             <article class="tile is-child columns is-multiline">
               <div class="column is-full">
                 <p class="title is-5 has-text-centered">{{comic.title}}</p>
+                <p class="subtitle is-size-6 has-text-centered">{{comic.day}}/{{comic.month}} - {{comic.year}}</p>
               </div>
               <div class="column is-full pb-2">
                 <figure class="image">
@@ -80,6 +82,7 @@ const latestComicNum = todaysComic.num;
 function openModal(chosenComic) {
   clickedComic.value = chosenComic;
   modalOpen.value = true;
+  document.documentElement.classList.add('is-clipped');
 }
 
 /**
